@@ -30,7 +30,7 @@ import ForeignCall	( Safety(..), CExportSpec(..), CLabelString,
 import OccName		( varName, dataName, tcClsName, tvName )
 import DataCon		( DataCon, dataConName )
 import SrcLoc		( Located(..), unLoc, getLoc, noLoc, combineSrcSpans,
-			  SrcSpan, combineLocs, srcLocFile, 
+			  SrcSpan, combineLocs, srcLocFile,
 			  mkSrcLoc, mkSrcSpan )
 import Module
 import StaticFlags	( opt_SccProfilingOn, opt_Hpc )
@@ -121,7 +121,7 @@ Conflicts: 38 shift/reduce (1.25)
 	    (x::T -> T) -> ..	-- Rhs is ...
 
 10 for ambiguity in 'e :: a `b` c'.  Does this mean 	[States 11, 253]
-	(e::a) `b` c, or 
+	(e::a) `b` c, or
 	(e :: (a `b` c))
     As well as `b` we can have !, VARSYM, QCONSYM, and CONSYM, hence 5 cases
     Same duplication between states 11 and 253 as the previous case
@@ -146,7 +146,7 @@ Conflicts: 38 shift/reduce (1.25)
 
 1 for ambiguity when the source file starts with "-- | doc". We need another
   token of lookahead to determine if a top declaration or the 'module' keyword
-  follows. Shift parses as if the 'module' keyword follows.   
+  follows. Shift parses as if the 'module' keyword follows.
 
 -- ---------------------------------------------------------------------------
 -- Adding location info
@@ -197,9 +197,9 @@ incorrect.
 %token
  '_'            { L _ ITunderscore }		-- Haskell keywords
  'as' 		{ L _ ITas }
- 'case' 	{ L _ ITcase }  	
- 'class' 	{ L _ ITclass } 
- 'data' 	{ L _ ITdata } 
+ 'case' 	{ L _ ITcase }
+ 'class' 	{ L _ ITclass }
+ 'data' 	{ L _ ITdata }
  'default' 	{ L _ ITdefault }
  'deriving' 	{ L _ ITderiving }
  'derive' 	{ L _ ITderive }
@@ -226,7 +226,7 @@ incorrect.
  'forall'	{ L _ ITforall }		-- GHC extension keywords
  'foreign'	{ L _ ITforeign }
  'export'	{ L _ ITexport }
- 'label'	{ L _ ITlabel } 
+ 'label'	{ L _ ITlabel }
  'dynamic'	{ L _ ITdynamic }
  'safe'		{ L _ ITsafe }
  'threadsafe'	{ L _ ITthreadsafe }
@@ -306,7 +306,7 @@ incorrect.
  STRING		{ L _ (ITstring   _) }
  INTEGER	{ L _ (ITinteger  _) }
  RATIONAL	{ L _ (ITrational _) }
-		    
+
  PRIMCHAR	{ L _ (ITprimchar   _) }
  PRIMSTRING	{ L _ (ITprimstring _) }
  PRIMINTEGER	{ L _ (ITprimint    _) }
@@ -319,11 +319,11 @@ incorrect.
  DOCSECTION	{ L _ (ITdocSection _ _) }
  DOCOPTIONS	{ L _ (ITdocOptions _) }
 
--- Template Haskell 
-'[|'            { L _ ITopenExpQuote  }       
-'[p|'           { L _ ITopenPatQuote  }      
-'[t|'           { L _ ITopenTypQuote  }      
-'[d|'           { L _ ITopenDecQuote  }      
+-- Template Haskell
+'[|'            { L _ ITopenExpQuote  }
+'[p|'           { L _ ITopenPatQuote  }
+'[t|'           { L _ ITopenTypQuote  }
+'[d|'           { L _ ITopenDecQuote  }
 '|]'            { L _ ITcloseQuote    }
 TH_ID_SPLICE    { L _ (ITidEscape _)  }     -- $x
 '$('	        { L _ ITparenEscape   }     -- $( exp )
@@ -359,22 +359,22 @@ identifier :: { Located RdrName }
 -- know what they are doing. :-)
 
 module 	:: { Located (HsModule RdrName) }
- 	: optdoc 'module' modid maybemoddeprec maybeexports 'where' body 
-		{% fileSrcSpan >>= \ loc -> case $1 of { (opt, info, doc) -> 
-		   return (L loc (HsModule (Just $3) $5 (fst $7) (snd $7) $4 
+ 	: optdoc 'module' modid maybemoddeprec maybeexports 'where' body
+		{% fileSrcSpan >>= \ loc -> case $1 of { (opt, info, doc) ->
+		   return (L loc (HsModule (Just $3) $5 (fst $7) (snd $7) $4
                           opt info doc) )}}
 	| missing_module_keyword top close
 		{% fileSrcSpan >>= \ loc ->
-		   return (L loc (HsModule Nothing Nothing 
-                          (fst $2) (snd $2) Nothing Nothing emptyHaddockModInfo 
+		   return (L loc (HsModule Nothing Nothing
+                          (fst $2) (snd $2) Nothing Nothing emptyHaddockModInfo
                           Nothing)) }
 
-optdoc :: { (Maybe String, HaddockModInfo RdrName, Maybe (HsDoc RdrName)) }                             
+optdoc :: { (Maybe String, HaddockModInfo RdrName, Maybe (HsDoc RdrName)) }
         : moduleheader            { (Nothing, fst $1, snd $1) }
-        | docoptions              { (Just $1, emptyHaddockModInfo, Nothing)} 
-        | docoptions moduleheader { (Just $1, fst $2, snd $2) } 
-        | moduleheader docoptions { (Just $2, fst $1, snd $1) } 
-        | {- empty -}             { (Nothing, emptyHaddockModInfo, Nothing) }  
+        | docoptions              { (Just $1, emptyHaddockModInfo, Nothing)}
+        | docoptions moduleheader { (Just $1, fst $2, snd $2) }
+        | moduleheader docoptions { (Just $2, fst $1, snd $1) }
+        | {- empty -}             { (Nothing, emptyHaddockModInfo, Nothing) }
 
 missing_module_keyword :: { () }
 	: {- empty -}				{% pushCurrentContext }
@@ -400,12 +400,12 @@ cvtopdecls :: { [LHsDecl RdrName] }
 
 header 	:: { Located (HsModule RdrName) }
  	: optdoc 'module' modid maybemoddeprec maybeexports 'where' header_body
-		{% fileSrcSpan >>= \ loc -> case $1 of { (opt, info, doc) -> 
-		   return (L loc (HsModule (Just $3) $5 $7 [] $4 
+		{% fileSrcSpan >>= \ loc -> case $1 of { (opt, info, doc) ->
+		   return (L loc (HsModule (Just $3) $5 $7 [] $4
                    opt info doc))}}
 	| missing_module_keyword importdecls
 		{% fileSrcSpan >>= \ loc ->
-		   return (L loc (HsModule Nothing Nothing $2 [] Nothing 
+		   return (L loc (HsModule Nothing Nothing $2 [] Nothing
                    Nothing emptyHaddockModInfo Nothing)) }
 
 header_body :: { [LImportDecl RdrName] }
@@ -432,20 +432,21 @@ expdoclist :: { [LIE RdrName] }
         : exp_doc expdoclist                           { $1 : $2 }
         | {- empty -}                                  { [] }
 
-exp_doc :: { LIE RdrName }                                                   
+exp_doc :: { LIE RdrName }
         : docsection    { sL (getLoc $1) (case (unLoc $1) of (n, doc) -> IEGroup n doc) }
-        | docnamed      { sL (getLoc $1) (IEDocNamed ((fst . unLoc) $1)) } 
-        | docnext       { sL (getLoc $1) (IEDoc (unLoc $1)) }       
-                       
+        | docnamed      { sL (getLoc $1) (IEDocNamed ((fst . unLoc) $1)) }
+        | docnext       { sL (getLoc $1) (IEDoc (unLoc $1)) }
+
    -- No longer allow things like [] and (,,,) to be exported
    -- They are built in syntax, always available
 export 	:: { LIE RdrName }
-	:  qvar				{ sL (getLoc $1) (IEVar (unLoc $1)) }
-	|  oqtycon			{ sL (getLoc $1) (IEThingAbs (unLoc $1)) }
-	|  oqtycon '(' '..' ')'		{ sL (comb2 $1 $>) (IEThingAll (unLoc $1)) }
-	|  oqtycon '(' ')'		{ sL (comb2 $1 $>) (IEThingWith (unLoc $1) []) }
-	|  oqtycon '(' qcnames ')'	{ sL (comb2 $1 $>) (IEThingWith (unLoc $1) (reverse $3)) }
-	|  'module' modid		{ sL (comb2 $1 $>) (IEModuleContents (unLoc $2)) }
+	:  qvar				{ sL (getLoc $1) (IEVar Nothing (unLoc $1)) }
+	|  oqtycon			{ sL (getLoc $1) (IEThingAbs Nothing (unLoc $1)) }
+	|  oqtycon '(' '..' ')'		{ sL (comb2 $1 $>) (IEThingAll Nothing (unLoc $1)) }
+	|  oqtycon '(' ')'		{ sL (comb2 $1 $>) (IEThingWith Nothing (unLoc $1) []) }
+	|  oqtycon '(' qcnames ')'	{ sL (comb2 $1 $>)
+                                (IEThingWith Nothing (unLoc $1) (reverse $3)) }
+	|  'module' modid		{ sL (comb2 $1 $>) (IEModuleContents Nothing (unLoc $2)) }
 
 qcnames :: { [RdrName] }
 	:  qcnames ',' qcname_ext	{ unLoc $3 : $1 }
@@ -454,8 +455,8 @@ qcnames :: { [RdrName] }
 qcname_ext :: { Located RdrName }	-- Variable or data constructor
 					-- or tagged type constructor
 	:  qcname			{ $1 }
-	|  'type' qcon			{ sL (comb2 $1 $2) 
-					     (setRdrNameSpace (unLoc $2) 
+	|  'type' qcon			{ sL (comb2 $1 $2)
+					     (setRdrNameSpace (unLoc $2)
 							      tcClsName)  }
 
 -- Cannot pull into qcname_ext, as qcname is also used in expression.
@@ -476,7 +477,7 @@ importdecls :: { [LImportDecl RdrName] }
 	| {- empty -}				{ [] }
 
 importdecl :: { LImportDecl RdrName }
-	: 'import' maybe_src optqualified modid maybeas maybeimpspec 
+	: 'import' maybe_src optqualified modid maybeas maybeimpspec
 		{ L (comb4 $1 $4 $5 $6) (ImportDecl $4 $2 $3 (unLoc $5) (unLoc $6)) }
 
 maybe_src :: { IsBootInterface }
@@ -528,7 +529,7 @@ topdecl :: { OrdList (LHsDecl RdrName) }
   	| ty_decl			{ unitOL (sL (getLoc $1) (TyClD (unLoc $1))) }
 	| 'instance' inst_type where_inst
 	    { let (binds, sigs, ats, _) = cvBindsAndSigs (unLoc $3)
-	      in 
+	      in
 	      unitOL (L (comb3 $1 $2 $3) (InstD (InstDecl $2 binds sigs ats)))}
         | stand_alone_deriving                  { unitOL (sL (comb2 $1 $>) (DerivD (unLoc $1))) }
 	| 'default' '(' comma_types0 ')'	{ unitOL (sL (comb2 $1 $>) $ DefD (DefaultDecl $3)) }
@@ -547,13 +548,13 @@ topdecl :: { OrdList (LHsDecl RdrName) }
 --
 cl_decl :: { LTyClDecl RdrName }
 	: 'class' tycl_hdr fds where_cls
-		{% do { let { (binds, sigs, ats, docs)           = 
+		{% do { let { (binds, sigs, ats, docs)           =
 			        cvBindsAndSigs (unLoc $4)
 		            ; (ctxt, tc, tvs, tparms) = unLoc $2}
                       ; checkTyVars tparms      -- only type vars allowed
 		      ; checkKindSigs ats
-		      ; return $ L (comb4 $1 $2 $3 $4) 
-				   (mkClassDecl (ctxt, tc, tvs) 
+		      ; return $ L (comb4 $1 $2 $3 $4)
+				   (mkClassDecl (ctxt, tc, tvs)
 					        (unLoc $3) sigs binds ats docs) } }
 
 -- Type declarations (toplevel)
@@ -567,19 +568,19 @@ ty_decl :: { LTyClDecl RdrName }
 		-- Instead we just say b is out of scope
 	        --
 		-- Note the use of type for the head; this allows
-		-- infix type constructors to be declared 
+		-- infix type constructors to be declared
  		{% do { (tc, tvs, _) <- checkSynHdr $2 False
-		      ; return (L (comb2 $1 $4) 
+		      ; return (L (comb2 $1 $4)
 				  (TySynonym tc tvs Nothing $4))
                       } }
 
            -- type family declarations
-        | 'type' 'family' type opt_kind_sig 
+        | 'type' 'family' type opt_kind_sig
 		-- Note the use of type for the head; this allows
 		-- infix type constructors to be declared
 		--
  		{% do { (tc, tvs, _) <- checkSynHdr $3 False
-		      ; return (L (comb3 $1 $3 $4) 
+		      ; return (L (comb3 $1 $3 $4)
 				  (TyFamily TypeFamily tc tvs (unLoc $4)))
 		      } }
 
@@ -589,8 +590,8 @@ ty_decl :: { LTyClDecl RdrName }
 		-- infix type constructors and type patterns
 		--
  		{% do { (tc, tvs, typats) <- checkSynHdr $3 True
-		      ; return (L (comb2 $1 $5) 
-				  (TySynonym tc tvs (Just typats) $5)) 
+		      ; return (L (comb2 $1 $5)
+				  (TySynonym tc tvs (Just typats) $5))
                       } }
 
           -- ordinary data type or newtype declaration
@@ -599,20 +600,20 @@ ty_decl :: { LTyClDecl RdrName }
                       ; checkTyVars tparms    -- no type pattern
 		      ; return $
 			  L (comb4 $1 $2 $3 $4)
-			           -- We need the location on tycl_hdr in case 
+			           -- We need the location on tycl_hdr in case
 				   -- constrs and deriving are both empty
-			    (mkTyData (unLoc $1) (ctxt, tc, tvs, Nothing) 
+			    (mkTyData (unLoc $1) (ctxt, tc, tvs, Nothing)
 			       Nothing (reverse (unLoc $3)) (unLoc $4)) } }
 
           -- ordinary GADT declaration
-        | data_or_newtype tycl_hdr opt_kind_sig 
+        | data_or_newtype tycl_hdr opt_kind_sig
 		 'where' gadt_constrlist
 		 deriving
 		{% do { let {(ctxt, tc, tvs, tparms) = unLoc $2}
                       ; checkTyVars tparms    -- can have type pats
 		      ; return $
 			  L (comb4 $1 $2 $4 $5)
-			    (mkTyData (unLoc $1) (ctxt, tc, tvs, Nothing) 
+			    (mkTyData (unLoc $1) (ctxt, tc, tvs, Nothing)
 			      (unLoc $3) (reverse (unLoc $5)) (unLoc $6)) } }
 
           -- data/newtype family
@@ -620,11 +621,11 @@ ty_decl :: { LTyClDecl RdrName }
 		{% do { let {(ctxt, tc, tvs, tparms) = unLoc $3}
                       ; checkTyVars tparms            -- no type pattern
 		      ; unless (null (unLoc ctxt)) $  -- and no context
-			  parseError (getLoc ctxt) 
+			  parseError (getLoc ctxt)
 			    "A family declaration cannot have a context"
 		      ; return $
 			  L (comb3 $1 $2 $4)
-			    (TyFamily (DataFamily (unLoc $1)) tc tvs 
+			    (TyFamily (DataFamily (unLoc $1)) tc tvs
 				      (unLoc $4)) } }
 
           -- data/newtype instance declaration
@@ -633,20 +634,20 @@ ty_decl :: { LTyClDecl RdrName }
                                              -- can have type pats
 		      ; return $
 			  L (comb4 $1 $3 $4 $5)
-			           -- We need the location on tycl_hdr in case 
+			           -- We need the location on tycl_hdr in case
 				   -- constrs and deriving are both empty
-			    (mkTyData (unLoc $1) (ctxt, tc, tvs, Just tparms) 
+			    (mkTyData (unLoc $1) (ctxt, tc, tvs, Just tparms)
 			      Nothing (reverse (unLoc $4)) (unLoc $5)) } }
 
           -- GADT instance declaration
-        | data_or_newtype 'instance' tycl_hdr opt_kind_sig 
+        | data_or_newtype 'instance' tycl_hdr opt_kind_sig
 		 'where' gadt_constrlist
 		 deriving
 		{% do { let {(ctxt, tc, tvs, tparms) = unLoc $3}
                                              -- can have type pats
 		      ; return $
 			  L (comb4 $1 $3 $6 $7)
-			    (mkTyData (unLoc $1) (ctxt, tc, tvs, Just tparms) 
+			    (mkTyData (unLoc $1) (ctxt, tc, tvs, Just tparms)
 			       (unLoc $4) (reverse (unLoc $6)) (unLoc $7)) } }
 
 -- Associate type family declarations
@@ -656,7 +657,7 @@ ty_decl :: { LTyClDecl RdrName }
 --
 -- * They also need to be separate from instances; otherwise, data family
 --   declarations without a kind signature cause parsing conflicts with empty
---   data declarations. 
+--   data declarations.
 --
 at_decl_cls :: { LTyClDecl RdrName }
            -- type family declarations
@@ -665,7 +666,7 @@ at_decl_cls :: { LTyClDecl RdrName }
 		-- infix type constructors to be declared
 		--
  		{% do { (tc, tvs, _) <- checkSynHdr $2 False
-		      ; return (L (comb3 $1 $2 $3) 
+		      ; return (L (comb3 $1 $2 $3)
 				  (TyFamily TypeFamily tc tvs (unLoc $3)))
 		      } }
 
@@ -675,8 +676,8 @@ at_decl_cls :: { LTyClDecl RdrName }
 		-- infix type constructors and type patterns
 		--
  		{% do { (tc, tvs, typats) <- checkSynHdr $2 True
-		      ; return (L (comb2 $1 $4) 
-				  (TySynonym tc tvs (Just typats) $4)) 
+		      ; return (L (comb2 $1 $4)
+				  (TySynonym tc tvs (Just typats) $4))
                       } }
 
           -- data/newtype family declaration
@@ -684,12 +685,12 @@ at_decl_cls :: { LTyClDecl RdrName }
 		{% do { let {(ctxt, tc, tvs, tparms) = unLoc $2}
                       ; checkTyVars tparms            -- no type pattern
 		      ; unless (null (unLoc ctxt)) $  -- and no context
-			  parseError (getLoc ctxt) 
+			  parseError (getLoc ctxt)
 			    "A family declaration cannot have a context"
 		      ; return $
 			  L (comb3 $1 $2 $3)
 			    (TyFamily (DataFamily (unLoc $1)) tc tvs
-				      (unLoc $3)) 
+				      (unLoc $3))
                       } }
 
 -- Associate type instances
@@ -701,8 +702,8 @@ at_decl_inst :: { LTyClDecl RdrName }
 		-- infix type constructors and type patterns
 		--
  		{% do { (tc, tvs, typats) <- checkSynHdr $2 True
-		      ; return (L (comb2 $1 $4) 
-				  (TySynonym tc tvs (Just typats) $4)) 
+		      ; return (L (comb2 $1 $4)
+				  (TySynonym tc tvs (Just typats) $4))
                       } }
 
         -- data/newtype instance declaration
@@ -711,20 +712,20 @@ at_decl_inst :: { LTyClDecl RdrName }
                                              -- can have type pats
 		      ; return $
 			  L (comb4 $1 $2 $3 $4)
-			           -- We need the location on tycl_hdr in case 
+			           -- We need the location on tycl_hdr in case
 				   -- constrs and deriving are both empty
-			    (mkTyData (unLoc $1) (ctxt, tc, tvs, Just tparms) 
+			    (mkTyData (unLoc $1) (ctxt, tc, tvs, Just tparms)
 			      Nothing (reverse (unLoc $3)) (unLoc $4)) } }
 
         -- GADT instance declaration
-        | data_or_newtype tycl_hdr opt_kind_sig 
+        | data_or_newtype tycl_hdr opt_kind_sig
 		 'where' gadt_constrlist
 		 deriving
 		{% do { let {(ctxt, tc, tvs, tparms) = unLoc $2}
                                              -- can have type pats
 		      ; return $
 			  L (comb4 $1 $2 $5 $6)
-			    (mkTyData (unLoc $1) (ctxt, tc, tvs, Just tparms) 
+			    (mkTyData (unLoc $1) (ctxt, tc, tvs, Just tparms)
 			     (unLoc $3) (reverse (unLoc $5)) (unLoc $6)) } }
 
 data_or_newtype :: { Located NewOrData }
@@ -742,8 +743,8 @@ opt_kind_sig :: { Located (Maybe Kind) }
 --	(Eq a, Ord b) => T a b
 --      T Int [a]			-- for associated types
 -- Rather a lot of inlining here, else we get reduce/reduce errors
-tycl_hdr :: { Located (LHsContext RdrName, 
-		       Located RdrName, 
+tycl_hdr :: { Located (LHsContext RdrName,
+		       Located RdrName,
 		       [LHsTyVarBndr RdrName],
 		       [LHsType RdrName]) }
 	: context '=>' type		{% checkTyClHdr $1         $3 >>= return.sL (comb2 $1 $>) }
@@ -797,7 +798,7 @@ decls_inst :: { Located (OrdList (LHsDecl RdrName)) }	-- Reversed
 	   | decl_inst			{ $1 }
 	   | {- empty -}		{ noLoc nilOL }
 
-decllist_inst 
+decllist_inst
         :: { Located (OrdList (LHsDecl RdrName)) }	-- Reversed
 	: '{'         decls_inst '}'	{ sL (comb2 $1 $>) (unLoc $2) }
 	|     vocurly decls_inst close	{ $2 }
@@ -812,7 +813,7 @@ where_inst :: { Located (OrdList (LHsDecl RdrName)) }	-- Reversed
 
 -- Declarations in binding groups other than classes and instances
 --
-decls 	:: { Located (OrdList (LHsDecl RdrName)) }	
+decls 	:: { Located (OrdList (LHsDecl RdrName)) }
 	: decls ';' decl		{ sL (comb2 $1 $>) (unLoc $1 `appOL` unLoc $3) }
 	| decls ';'			{ sL (comb2 $1 $>) (unLoc $1) }
 	| decl				{ $1 }
@@ -847,11 +848,11 @@ rules	:: { OrdList (LHsDecl RdrName) }
 
 rule  	:: { LHsDecl RdrName }
 	: STRING activation rule_forall infixexp '=' exp
-	     { sL (comb2 $1 $>) $ RuleD (HsRule (getSTRING $1) 
-				  ($2 `orElse` AlwaysActive) 
+	     { sL (comb2 $1 $>) $ RuleD (HsRule (getSTRING $1)
+				  ($2 `orElse` AlwaysActive)
 				  $3 $4 placeHolderNames $6 placeHolderNames) }
 
-activation :: { Maybe Activation } 
+activation :: { Maybe Activation }
         : {- empty -}                           { Nothing }
         | explicit_activation                   { Just $1 }
 
@@ -883,7 +884,7 @@ deprecations :: { OrdList (LHsDecl RdrName) }
 -- SUP: TEMPORARY HACK, not checking for `module Foo'
 deprecation :: { OrdList (LHsDecl RdrName) }
 	: depreclist STRING
-		{ toOL [ sL (comb2 $1 $>) $ DeprecD (Deprecation n (getSTRING $2)) 
+		{ toOL [ sL (comb2 $1 $>) $ DeprecD (Deprecation n (getSTRING $2))
 		       | n <- unLoc $1 ] }
 
 
@@ -893,7 +894,7 @@ deprecation :: { OrdList (LHsDecl RdrName) }
 fdecl :: { LHsDecl RdrName }
 fdecl : 'import' callconv safety fspec
 		{% mkImport $2 $3 (unLoc $4) >>= return.sL (comb2 $1 $>) }
-      | 'import' callconv        fspec		
+      | 'import' callconv        fspec
 		{% do { d <- mkImport $2 (PlaySafe False) (unLoc $3);
 			return (sL (comb2 $1 $>) d) } }
       | 'export' callconv fspec
@@ -966,7 +967,7 @@ ctypedoc  :: { LHsType RdrName }
         | context '=>' gentypedoc        { sL (comb2 $1 $>) $ mkImplicitHsForAllTy   $1 $3 }
 	-- A type of form (context => type) is an *implicit* HsForAllTy
 	| gentypedoc			 { $1 }
-	
+
 strict_mark :: { Located HsBang }
 	: '!'				{ sL (getLoc $1) HsStrict }
 	| '{-# UNPACK' '#-}' '!'	{ sL (comb2 $1 $>) HsUnbox }
@@ -1047,7 +1048,7 @@ tv_bndrs :: { [LHsTyVarBndr RdrName] }
 
 tv_bndr :: { LHsTyVarBndr RdrName }
 	: tyvar				{ sL (getLoc $1) (UserTyVar (unLoc $1)) }
-	| '(' tyvar '::' kind ')'	{ sL (comb2 $1 $>) (KindedTyVar (unLoc $2) 
+	| '(' tyvar '::' kind ')'	{ sL (comb2 $1 $>) (KindedTyVar (unLoc $2)
 							  (unLoc $4)) }
 
 fds :: { Located [Located ([RdrName], [RdrName])] }
@@ -1089,7 +1090,7 @@ gadt_constrlist :: { Located [LConDecl RdrName] }
 gadt_constrs :: { Located [LConDecl RdrName] }
         : gadt_constrs ';' gadt_constr  { sL (comb2 $1 $>) ($3 : unLoc $1) }
         | gadt_constrs ';' 		{ $1 }
-        | gadt_constr                   { sL (getLoc $1) [$1] } 
+        | gadt_constr                   { sL (getLoc $1) [$1] }
 
 -- We allow the following forms:
 --	C :: Eq a => a -> T a
@@ -1099,19 +1100,19 @@ gadt_constrs :: { Located [LConDecl RdrName] }
 
 gadt_constr :: { LConDecl RdrName }
         : con '::' sigtype
-              { sL (comb2 $1 $>) (mkGadtDecl $1 $3) } 
+              { sL (comb2 $1 $>) (mkGadtDecl $1 $3) }
         -- Syntax: Maybe merge the record stuff with the single-case above?
         --         (to kill the mostly harmless reduce/reduce error)
         -- XXX revisit audreyt
 	| constr_stuff_record '::' sigtype
-		{ let (con,details) = unLoc $1 in 
+		{ let (con,details) = unLoc $1 in
 		  sL (comb2 $1 $>) (ConDecl con Implicit [] (noLoc []) details (ResTyGADT $3) Nothing) }
 {-
 	| forall context '=>' constr_stuff_record '::' sigtype
-		{ let (con,details) = unLoc $4 in 
+		{ let (con,details) = unLoc $4 in
 		  sL (comb2 $1 $>) (ConDecl con Implicit (unLoc $1) $2 details (ResTyGADT $6) Nothing ) }
 	| forall constr_stuff_record '::' sigtype
-		{ let (con,details) = unLoc $2 in 
+		{ let (con,details) = unLoc $2 in
 		  sL (comb2 $1 $>) (ConDecl con Implicit (unLoc $1) (noLoc []) details (ResTyGADT $4) Nothing) }
 -}
 
@@ -1125,11 +1126,11 @@ constrs1 :: { Located [LConDecl RdrName] }
 	| constr			                  { sL (getLoc $1) [$1] }
 
 constr :: { LConDecl RdrName }
-	: maybe_docnext forall context '=>' constr_stuff maybe_docprev	
-		{ let (con,details) = unLoc $5 in 
+	: maybe_docnext forall context '=>' constr_stuff maybe_docprev
+		{ let (con,details) = unLoc $5 in
 		  L (comb4 $2 $3 $4 $5) (ConDecl con Explicit (unLoc $2) $3 details ResTyH98 ($1 `mplus` $6)) }
 	| maybe_docnext forall constr_stuff maybe_docprev
-		{ let (con,details) = unLoc $3 in 
+		{ let (con,details) = unLoc $3 in
 		  L (comb2 $2 $3) (ConDecl con Explicit (unLoc $2) (noLoc []) details ResTyH98 ($1 `mplus` $4)) }
 
 forall :: { Located [LHsTyVarBndr RdrName] }
@@ -1137,7 +1138,7 @@ forall :: { Located [LHsTyVarBndr RdrName] }
 	| {- empty -}			{ noLoc [] }
 
 constr_stuff :: { Located (Located RdrName, HsConDetails RdrName (LBangType RdrName)) }
--- We parse the constructor declaration 
+-- We parse the constructor declaration
 --	C t1 t2
 -- as a btype (treating C as a type constructor) and then convert C to be
 -- a data constructor.  Reason: it might continue like this:
@@ -1171,7 +1172,7 @@ deriving :: { Located (Maybe [LHsType RdrName]) }
 				      ; return (sL (comb2 $1 $>) (Just [p])) } }
 	| 'deriving' '(' ')'	 		{ sL (comb2 $1 $>) (Just []) }
 	| 'deriving' '(' inst_types1 ')' 	{ sL (comb2 $1 $>) (Just $3) }
-             -- Glasgow extension: allow partial 
+             -- Glasgow extension: allow partial
              -- applications in derivings
 
 -----------------------------------------------------------------------------
@@ -1188,12 +1189,12 @@ deriving :: { Located (Maybe [LHsType RdrName]) }
   ATTENTION: Dirty Hackery Ahead! If the second alternative of vars is var
   instead of qvar, we get another shift/reduce-conflict. Consider the
   following programs:
-  
+
      { (^^) :: Int->Int ; }          Type signature; only var allowed
 
      { (^^) :: Int->Int = ... ; }    Value defn with result signature;
 				     qvar allowed (because of instance decls)
-  
+
   We can't tell whether to reduce var to qvar until after we've read the signatures.
 -}
 
@@ -1209,7 +1210,7 @@ docdecld :: { LDocDecl RdrName }
 decl 	:: { Located (OrdList (LHsDecl RdrName)) }
 	: sigdecl			{ $1 }
 	| '!' aexp rhs			{% do { pat <- checkPattern $2;
-					        return (sL (comb2 $1 $>) $ unitOL $ sL (comb2 $1 $>) $ ValD ( 
+					        return (sL (comb2 $1 $>) $ unitOL $ sL (comb2 $1 $>) $ ValD (
 							PatBind (sL (comb2 $1 $>) $ BangPat pat) (unLoc $3)
 								placeHolderType placeHolderNames)) } }
 	| infixexp opt_sig rhs		{% do { r <- checkValDef $1 $2 $3;
@@ -1229,17 +1230,17 @@ gdrh :: { LGRHS RdrName }
 
 sigdecl :: { Located (OrdList (LHsDecl RdrName)) }
 	: infixexp '::' sigtypedoc
-				{% do s <- checkValSig $1 $3; 
+				{% do s <- checkValSig $1 $3;
 				      return (sL (comb2 $1 $>) $ unitOL (sL (comb2 $1 $>) $ SigD s)) }
 		-- See the above notes for why we need infixexp here
 	| var ',' sig_vars '::' sigtypedoc
 				{ sL (comb2 $1 $>) $ toOL [ sL (comb2 $1 $>) $ SigD (TypeSig n $5) | n <- $1 : unLoc $3 ] }
 	| infix prec ops	{ sL (comb2 $1 $>) $ toOL [ sL (comb2 $1 $>) $ SigD (FixSig (FixitySig n (Fixity $2 (unLoc $1))))
 					     | n <- unLoc $3 ] }
-	| '{-# INLINE'   activation qvar '#-}'	      
+	| '{-# INLINE'   activation qvar '#-}'
 				{ sL (comb2 $1 $>) $ unitOL (sL (comb2 $1 $>) $ SigD (InlineSig $3 (mkInlineSpec $2 (getINLINE $1)))) }
 	| '{-# SPECIALISE' qvar '::' sigtypes1 '#-}'
-			 	{ sL (comb2 $1 $>) $ toOL [ sL (comb2 $1 $>) $ SigD (SpecSig $2 t defaultInlineSpec) 
+			 	{ sL (comb2 $1 $>) $ toOL [ sL (comb2 $1 $>) $ SigD (SpecSig $2 t defaultInlineSpec)
 					    | t <- $4] }
 	| '{-# SPECIALISE_INLINE' activation qvar '::' sigtypes1 '#-}'
 			 	{ sL (comb2 $1 $>) $ toOL [ sL (comb2 $1 $>) $ SigD (SpecSig $3 t (mkInlineSpec $2 (getSPEC_INLINE $1)))
@@ -1263,7 +1264,7 @@ infixexp :: { LHsExpr RdrName }
 	| infixexp qop exp10		{ sL (comb2 $1 $>) (OpApp $1 $2 (panic "fixity") $3) }
 
 exp10 :: { LHsExpr RdrName }
-	: '\\' apat apats opt_asig '->' exp	
+	: '\\' apat apats opt_asig '->' exp
 			{ sL (comb2 $1 $>) $ HsLam (mkMatchGroup [sL (comb2 $1 $>) $ Match ($2:$3) $4
 							   	(unguardedGRHSs $6)
 							    ]) }
@@ -1285,9 +1286,9 @@ exp10 :: { LHsExpr RdrName }
 							then HsTickPragma (unLoc $1) $2
 							else HsPar $2 }
 
-	| 'proc' aexp '->' exp	
-			{% checkPattern $2 >>= \ p -> 
-			   return (sL (comb2 $1 $>) $ HsProc p (sL (comb2 $1 $>) $ HsCmdTop $4 [] 
+	| 'proc' aexp '->' exp
+			{% checkPattern $2 >>= \ p ->
+			   return (sL (comb2 $1 $>) $ HsProc p (sL (comb2 $1 $>) $ HsCmdTop $4 []
 						   placeHolderType undefined)) }
 						-- TODO: is sL (comb2 $1 $>) right here?
 
@@ -1321,7 +1322,7 @@ aexp	:: { LHsExpr RdrName }
 	| aexp1				{ $1 }
 
 aexp1	:: { LHsExpr RdrName }
-        : aexp1 '{' fbinds '}' 	{% do { r <- mkRecConstrOrUpdate $1 (comb2 $2 $4) 
+        : aexp1 '{' fbinds '}' 	{% do { r <- mkRecConstrOrUpdate $1 (comb2 $2 $4)
 							$3;
 				        return (sL (comb2 $1 $>) r) }}
   	| aexp2			{ $1 }
@@ -1351,10 +1352,10 @@ aexp2	:: { LHsExpr RdrName }
 	| '(' infixexp qop ')'		{ sL (comb2 $1 $>) $ SectionL $2 $3 }
 	| '(' qopm infixexp ')'		{ sL (comb2 $1 $>) $ SectionR $2 $3 }
 	| '_'				{ sL (getLoc $1) EWildPat }
-	
+
 	-- Template Haskell Extension
-	| TH_ID_SPLICE          { sL (getLoc $1) $ HsSpliceE (mkHsSplice 
-					(sL (getLoc $1) $ HsVar (mkUnqual varName 
+	| TH_ID_SPLICE          { sL (getLoc $1) $ HsSpliceE (mkHsSplice
+					(sL (getLoc $1) $ HsVar (mkUnqual varName
 							(getTH_ID_SPLICE $1)))) } -- $x
 	| '$(' exp ')'   	{ sL (comb2 $1 $>) $ HsSpliceE (mkHsSplice $2) }               -- $( exp )
 
@@ -1362,8 +1363,8 @@ aexp2	:: { LHsExpr RdrName }
 	| TH_VAR_QUOTE qcon 	{ sL (comb2 $1 $>) $ HsBracket (VarBr (unLoc $2)) }
 	| TH_TY_QUOTE tyvar 	{ sL (comb2 $1 $>) $ HsBracket (VarBr (unLoc $2)) }
  	| TH_TY_QUOTE gtycon	{ sL (comb2 $1 $>) $ HsBracket (VarBr (unLoc $2)) }
-	| '[|' exp '|]'         { sL (comb2 $1 $>) $ HsBracket (ExpBr $2) }                       
-	| '[t|' ctype '|]'      { sL (comb2 $1 $>) $ HsBracket (TypBr $2) }                       
+	| '[|' exp '|]'         { sL (comb2 $1 $>) $ HsBracket (ExpBr $2) }
+	| '[t|' ctype '|]'      { sL (comb2 $1 $>) $ HsBracket (TypBr $2) }
 	| '[p|' infixexp '|]'   {% checkPattern $2 >>= \p ->
 					   return (sL (comb2 $1 $>) $ HsBracket (PatBr p)) }
 	| '[d|' cvtopbody '|]'	{ sL (comb2 $1 $>) $ HsBracket (DecBr (mkGroup $2)) }
@@ -1390,7 +1391,7 @@ texp :: { LHsExpr RdrName }
 	: exp				{ $1 }
 	| qopm infixexp			{ sL (comb2 $1 $>) $ SectionR $1 $2 }
 	-- The second production is really here only for bang patterns
-	-- but 
+	-- but
 
 texps :: { [LHsExpr RdrName] }
 	: texps ',' texp		{ $3 : $1 }
@@ -1419,16 +1420,16 @@ lexps :: { Located [LHsExpr RdrName] }
 -----------------------------------------------------------------------------
 -- List Comprehensions
 
-pquals :: { Located [LStmt RdrName] }	-- Either a singleton ParStmt, 
+pquals :: { Located [LStmt RdrName] }	-- Either a singleton ParStmt,
 					-- or a reversed list of Stmts
 	: pquals1			{ case unLoc $1 of
 					    [qs] -> sL (getLoc $1) qs
 					    qss  -> sL (getLoc $1) [sL (getLoc $1) (ParStmt stmtss)]
 						 where
-						    stmtss = [ (reverse qs, undefined) 
+						    stmtss = [ (reverse qs, undefined)
 						    	     | qs <- qss ]
 					}
-			
+
 pquals1 :: { Located [[LStmt RdrName]] }
 	: pquals1 '|' quals		{ sL (comb2 $1 $>) (unLoc $3 : unLoc $1) }
 	| '|' quals			{ L (getLoc $2) [unLoc $2] }
@@ -1448,7 +1449,7 @@ quals :: { Located [LStmt RdrName] }
 parr :: { LHsExpr RdrName }
 	: 				{ noLoc (ExplicitPArr placeHolderType []) }
 	| texp				{ sL (getLoc $1) $ ExplicitPArr placeHolderType [$1] }
-	| lexps 			{ sL (getLoc $1) $ ExplicitPArr placeHolderType 
+	| lexps 			{ sL (getLoc $1) $ ExplicitPArr placeHolderType
 						       (reverse (unLoc $1)) }
 	| texp '..' exp	 		{ sL (comb2 $1 $>) $ PArrSeq noPostTcExpr (FromTo $1 $3) }
 	| texp ',' exp '..' exp		{ sL (comb2 $1 $>) $ PArrSeq noPostTcExpr (FromThenTo $1 $3 $5) }
@@ -1497,7 +1498,7 @@ pat     :: { LPat RdrName }
 pat 	: infixexp		{% checkPattern $1 }
 	| '!' aexp		{% checkPattern (sL (comb2 $1 $>) (SectionR (sL (getLoc $1) (HsVar bang_RDR)) $2)) }
 
-apat   :: { LPat RdrName }	
+apat   :: { LPat RdrName }
 apat 	: aexp			{% checkPattern $1 }
 	| '!' aexp		{% checkPattern (sL (comb2 $1 $>) (SectionR (sL (getLoc $1) (HsVar bang_RDR)) $2)) }
 
@@ -1526,7 +1527,7 @@ stmts_help :: { Located [LStmt RdrName] } -- might be empty
 	: ';' stmts			{ sL (comb2 $1 $>) (unLoc $2) }
 	| {- empty -}			{ noLoc [] }
 
--- For typing stmts at the GHCi prompt, where 
+-- For typing stmts at the GHCi prompt, where
 -- the input may consist of just comments.
 maybe_stmt :: { Maybe (LStmt RdrName) }
 	: stmt				{ Just $1 }
@@ -1554,7 +1555,7 @@ fbinds 	:: { HsRecordBinds RdrName }
 fbinds1	:: { [(Located id, LHsExpr id)] }
 	: fbinds1 ',' fbind		{ $3 : $1 }
 	| fbind				{ [$1] }
-  
+
 fbind	:: { (Located RdrName, LHsExpr RdrName) }
 	: qvar '=' exp			{ ($1,$3) }
 
@@ -1603,7 +1604,7 @@ sysdcon	:: { Located DataCon }	-- Wired in data constructors
 	| '[' ']'		{ sL (comb2 $1 $>) nilDataCon }
 
 conop :: { Located RdrName }
-	: consym		{ $1 }	
+	: consym		{ $1 }
 	| '`' conid '`'		{ sL (comb2 $1 $>) (unLoc $2) }
 
 qconop :: { Located RdrName }
@@ -1695,7 +1696,7 @@ tyvarsym :: { Located RdrName }
 tyvarsym : VARSYM		{ sL (getLoc $1) $! mkUnqual tvName (getVARSYM $1) }
 
 -----------------------------------------------------------------------------
--- Variables 
+-- Variables
 
 var 	:: { Located RdrName }
 	: varid			{ $1 }
@@ -1745,10 +1746,10 @@ varsym_no_minus :: { Located RdrName } -- varsym not including '-'
 	| special_sym		{ sL (getLoc $1) $ mkUnqual varName (unLoc $1) }
 
 
--- These special_ids are treated as keywords in various places, 
+-- These special_ids are treated as keywords in various places,
 -- but as ordinary ids elsewhere.   'special_id' collects all these
 -- except 'unsafe', 'forall', and 'family' whose treatment differs
--- depending on context 
+-- depending on context
 special_id :: { Located FastString }
 special_id
 	: 'as'			{ sL (getLoc $1) FSLIT("as") }
@@ -1836,7 +1837,7 @@ docprev :: { LHsDoc RdrName }
 
 docnamed :: { Located (String, (HsDoc RdrName)) }
   : DOCNAMED {%
-      let string = getDOCNAMED $1 
+      let string = getDOCNAMED $1
           (name, rest) = break isSpace string
       in case parseHaddockParagraphs (tokenise rest) of {
         Left  err -> parseError (getLoc $1) err;
@@ -1851,16 +1852,16 @@ docsection :: { Located (n, HsDoc RdrName) }
 docoptions :: { String }
   : DOCOPTIONS { getDOCOPTIONS $1 }
 
-moduleheader :: { (HaddockModInfo RdrName, Maybe (HsDoc RdrName)) }                                    
+moduleheader :: { (HaddockModInfo RdrName, Maybe (HsDoc RdrName)) }
         : DOCNEXT {% let string = getDOCNEXT $1 in
-               case parseModuleHeader string of {                       
-                 Right (str, info) ->                                  
-                   case parseHaddockParagraphs (tokenise str) of {               
-                     Left err -> parseError (getLoc $1) err;                    
-                     Right doc -> return (info, Just doc);          
-                   };                                             
+               case parseModuleHeader string of {
+                 Right (str, info) ->
+                   case parseHaddockParagraphs (tokenise str) of {
+                     Left err -> parseError (getLoc $1) err;
+                     Right doc -> return (info, Just doc);
+                   };
                  Left err -> parseError (getLoc $1) err
-            }  }                                                  
+            }  }
 
 maybe_docprev :: { Maybe (LHsDoc RdrName) }
 	: docprev                       { Just $1 }
@@ -1922,8 +1923,8 @@ sL span a = span `seq` L span a
 -- make a point SrcSpan at line 1, column 0.  Strictly speaking we should
 -- try to find the span of the whole file (ToDo).
 fileSrcSpan :: P SrcSpan
-fileSrcSpan = do 
-  l <- getSrcLoc; 
+fileSrcSpan = do
+  l <- getSrcLoc;
   let loc = mkSrcLoc (srcLocFile l) 1 0;
   return (mkSrcSpan loc loc)
 }
