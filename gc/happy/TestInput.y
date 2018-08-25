@@ -440,13 +440,13 @@ exp_doc :: { LIE RdrName }
    -- No longer allow things like [] and (,,,) to be exported
    -- They are built in syntax, always available
 export 	:: { LIE RdrName }
-	:  qvar				{ sL (getLoc $1) (IEVar Nothing (unLoc $1)) }
-	|  oqtycon			{ sL (getLoc $1) (IEThingAbs Nothing (unLoc $1)) }
-	|  oqtycon '(' '..' ')'		{ sL (comb2 $1 $>) (IEThingAll Nothing (unLoc $1)) }
-	|  oqtycon '(' ')'		{ sL (comb2 $1 $>) (IEThingWith Nothing (unLoc $1) []) }
+	:  qvar				{ sL (getLoc $1) (IEVar (unLoc $1) Nothing) }
+	|  oqtycon			{ sL (getLoc $1) (IEThingAbs (unLoc $1) Nothing) }
+	|  oqtycon '(' '..' ')'		{ sL (comb2 $1 $>) (IEThingAll (unLoc $1) Nothing) }
+	|  oqtycon '(' ')'		{ sL (comb2 $1 $>) (IEThingWith (unLoc $1) []) Nothing }
 	|  oqtycon '(' qcnames ')'	{ sL (comb2 $1 $>)
-                                (IEThingWith Nothing (unLoc $1) (reverse $3)) }
-	|  'module' modid		{ sL (comb2 $1 $>) (IEModuleContents Nothing (unLoc $2)) }
+                                (IEThingWith (unLoc $1) Nothing (reverse $3)) }
+	|  'module' modid		{ sL (comb2 $1 $>) (IEModuleContents (unLoc $2) Nothing) }
 
 qcnames :: { [RdrName] }
 	:  qcnames ',' qcname_ext	{ unLoc $3 : $1 }

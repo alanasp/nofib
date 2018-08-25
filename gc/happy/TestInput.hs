@@ -16428,14 +16428,14 @@ happyReduction_40 _  = notHappyAtAll
 happyReduce_41 = happySpecReduce_1  23 happyReduction_41
 happyReduction_41 (HappyAbsSyn8  happy_var_1)
 	 =  HappyAbsSyn22
-		 (sL (getLoc happy_var_1) (IEVar Nothing (unLoc happy_var_1))
+		 (sL (getLoc happy_var_1) (IEVar (unLoc happy_var_1) Nothing)
 	)
 happyReduction_41 _  = notHappyAtAll
 
 happyReduce_42 = happySpecReduce_1  23 happyReduction_42
 happyReduction_42 (HappyAbsSyn8  happy_var_1)
 	 =  HappyAbsSyn22
-		 (sL (getLoc happy_var_1) (IEThingAbs Nothing (unLoc happy_var_1))
+		 (sL (getLoc happy_var_1) (IEThingAbs (unLoc happy_var_1) Nothing)
 	)
 happyReduction_42 _  = notHappyAtAll
 
@@ -16446,8 +16446,8 @@ happyReduction_43 ((HappyTerminal happy_var_4) `HappyStk`
 	(HappyAbsSyn8  happy_var_1) `HappyStk`
 	happyRest)
 	 = HappyAbsSyn22
-		 (sL (comb2 happy_var_1 happy_var_4) (IEThingAll Nothing
-                                            (unLoc happy_var_1))
+		 (sL (comb2 happy_var_1 happy_var_4) (IEThingAll (unLoc happy_var_1)
+                                                      Nothing)
 	) `HappyStk` happyRest
 
 happyReduce_44 = happySpecReduce_3  23 happyReduction_44
@@ -16455,8 +16455,8 @@ happyReduction_44 (HappyTerminal happy_var_3)
 	_
 	(HappyAbsSyn8  happy_var_1)
 	 =  HappyAbsSyn22
-		 (sL (comb2 happy_var_1 happy_var_3) (IEThingWith Nothing
-                                            (unLoc happy_var_1) [])
+		 (sL (comb2 happy_var_1 happy_var_3) (IEThingWith (unLoc happy_var_1)
+                                                        Nothing [])
 	)
 happyReduction_44 _ _ _  = notHappyAtAll
 
@@ -16467,16 +16467,16 @@ happyReduction_45 ((HappyTerminal happy_var_4) `HappyStk`
 	(HappyAbsSyn8  happy_var_1) `HappyStk`
 	happyRest)
 	 = HappyAbsSyn22
-		 (sL (comb2 happy_var_1 happy_var_4) (IEThingWith Nothing
-                                    (unLoc happy_var_1) (reverse happy_var_3))
+		 (sL (comb2 happy_var_1 happy_var_4)
+        (IEThingWith (unLoc happy_var_1) Nothing (reverse happy_var_3))
 	) `HappyStk` happyRest
 
 happyReduce_46 = happySpecReduce_2  23 happyReduction_46
 happyReduction_46 (HappyAbsSyn207  happy_var_2)
 	(HappyTerminal happy_var_1)
 	 =  HappyAbsSyn22
-		 (sL (comb2 happy_var_1 happy_var_2) (IEModuleContents Nothing
-                                            (unLoc happy_var_2))
+		 (sL (comb2 happy_var_1 happy_var_2) (IEModuleContents (unLoc happy_var_2)
+                                                                Nothing)
 	)
 happyReduction_46 _ _  = notHappyAtAll
 
